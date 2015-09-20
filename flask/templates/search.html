@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><title>wooyun public</title>
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="static/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet" href="static/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="static/js/jquery-1.11.3.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="static/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<!-- 分页组件js -->
+<script src="static/js/jquery.twbsPagination.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+	  <div class="col-md-1"></div>
+	  <div class="col-md-10">
+		  <div>
+	  		<h2>关键字：{{keywords}}的查询结果<small>共{{page_info['total_rows']}}记录</small></h2>
+			  	<table class="table table-hover">
+			  	<tr>
+			  		<th width="20%">WooYun Id</th>
+			  		<th>标题</th>
+			  		<th width="15%">漏洞类型</th>
+			  		<th width="10%">提交时间</th>
+			  		<th width="10%">提交者</th>
+			  	</tr>
+			  	{% for row in page_info['rows'] %}
+			  	<tr>
+			  		<td><a href="static/{{row['wooyun_id']}}.html">{{row['wooyun_id']}}</a></td>
+			  		<td><a href="http://www.wooyun.org/bugs/{{row['wooyun_id']}}">
+			  			{{row['title']}}</a></td>
+			  		<td>{{row['bug_type']}}</td>
+			  		<td>{{row['datetime']}}</td>
+			  		<td>{{row['author']}}</td>
+			  	</tr>
+			  	{% endfor %}
+				</table>
+				<ul id="pagination" class="pagination-sm"></ul>
+				<script >
+					 $(pagination).twbsPagination({
+					 	first: "首页",
+					 	prev: "前一页",
+					 	next: "后一页",
+					 	last: "尾页",
+				        totalPages: {{page_info['total']}},
+				        visiblePages: 5,
+				        startPage: {{page_info['current']}},
+				        onPageClick: function (event, page) {
+				            location.href="/search?keywords={{keywords}}&&page="+page;
+				        }
+				    });
+				</script>
+			</div>
+	 	</div>
+	  <div class="col-md-1"></div>
+	</div>
+</div>
+</body>
+</html>
