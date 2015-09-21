@@ -25,7 +25,7 @@ PAGE_MAX_DEFAULT = 1
 LOCAL_STORE_DEFAULT = 'true'
 UPDATE_DEFAULT = 'true'
 #save to local
-LOCAL_STORE='/Users/hancool/wooyun_public/flask/static/'
+LOCAL_STORE='../../flask/static/'
 #image store
 IMAGES_STORE = LOCAL_STORE
 #save to mongdodb
