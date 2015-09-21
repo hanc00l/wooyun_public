@@ -1,33 +1,31 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+{% extends "base.html" %}
+{% block content %}
 
-<head><title>wooyun public</title>
-<!-- 新 Bootstrap 核心 CSS 文件 -->
-<link rel="stylesheet" href="static/bootstrap-3.3.5-dist/css/bootstrap.min.css">
-<!-- 可选的Bootstrap主题文件（一般不用引入） -->
-<link rel="stylesheet" href="static/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css">
-<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="static/js/jquery-1.11.3.min.js"></script>
-<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="static/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
-</head>
-<body>
-<h4></h4>
-<h4></h4>
-<div class="container-fluid">
-  <div class="row">
-  <div class="col-md-4"></div>
-  <div class="col-md-4">
-  	<form class="form-inline" action="/search" method="get">
-	  <div class="form-group">
-	    <label for="keywords">keywords:</label>
-	    <input type="text" class="form-control" name="keywords" placeholder="keywords">
-	  </div>
-	  <button type="submit" class="btn btn-primary">Search</button>
-	</form>
-  </div>
-  <div class="col-md-4"></div>
-  </div>
+<div class="jumbotron masthead">
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6 col-md-offset-3">
+            <h2 class="text-center">乌云公开漏洞搜索&nbsp;&nbsp;<small><small>收录漏洞数:{{total_count}}</small></small></h2>
+            <form class="form-horizontal" action="/search" method="get" name="login">
+                <input type="text" class="form-control input-lg" id="keywords" name="keywords" placeholder="输入搜索关键词……">
+                <br/>
+                <div class="form-group">
+                  <div class="col-sm-3">
+				  	    <input type="submit" class="btn btn-primary btn-block" value="Search"> 			
+				  </div>
+				  <div class="col-sm-3">
+						<div class="checkbox">
+					    	<label>
+					      		<input type="checkbox" name="search_by_html" value="true" checked="true"> 全文搜索
+					    	</label>
+					  	</div>
+				  </div>	 
+			    </div>
+            </form>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+<div class="container projects">
+</div>
+
+{% endblock %}
