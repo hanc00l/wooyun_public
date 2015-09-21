@@ -30,7 +30,7 @@ class WooyunSpider(scrapy.Spider):
     def parse(self, response):
         total_pages = response.xpath("//p[@class='page']/text()").re('\d+')[1]
         if self.page_max == 0:
-            end_page = int(total_page)
+            end_page = int(total_pages)
         else:
             end_page = self.page_max
         for n in range(1,end_page + 1):         
