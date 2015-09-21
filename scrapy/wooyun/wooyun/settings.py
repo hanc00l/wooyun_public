@@ -23,6 +23,7 @@ ITEM_PIPELINES = {
 #the crawl default setting
 PAGE_MAX_DEFAULT = 1
 LOCAL_STORE_DEFAULT = 'true'
+UPDATE_DEFAULT = 'true'
 #save to local
 LOCAL_STORE='/Users/hancool/wooyun_public/flask/static/'
 #image store

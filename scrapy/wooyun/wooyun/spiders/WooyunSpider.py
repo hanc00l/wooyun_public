@@ -13,9 +13,19 @@ class WooyunSpider(scrapy.Spider):
         'http://wooyun.org/bugs/new_public/'
     ]
 
-    def __init__(self,page_max=settings['PAGE_MAX_DEFAULT'],local_store=settings['LOCAL_STORE_DEFAULT'],*args, **kwargs):
+    def __init__(self,page_max=settings['PAGE_MAX_DEFAULT'],local_store=settings['LOCAL_STORE_DEFAULT'],\
+            update=settings['UPDATE_DEFAULT'],*args, **kwargs):
         self.page_max = int(page_max)
         self.local_store = 'true' == local_store.lower()
+        self.update = 'true' == update.lower()
+
+        self.connection_string = "mongodb://%s:%d" % (settings['MONGODB_SERVER'],settings['MONGODB_PORT'])
+        self.client = pymongo.MongoClient(self.connection_string)
+        self.db = self.client[settings['MONGODB_DB']]
+        self.collection = self.db[settings['MONGODB_COLLECTION']]
+
+    def closed(self,reason):
+        self.client.close()
 
     def parse(self, response):
         total_pages = response.xpath("//p[@class='page']/text()").re('\d+')[1]
@@ -30,9 +40,11 @@ class WooyunSpider(scrapy.Spider):
 
     def parse_list(self,response):
         links = response.xpath('//tbody/tr/td/a/@href').extract()
-        for url in links:                
-            url = response.urljoin(url)
-            yield scrapy.Request(url, self.parse_detail)
+        for url in links:  
+            wooyun_id = url.split('/')[2]
+            if self.update == True or self.__search_mongodb(wooyun_id) == False:
+                url = response.urljoin(url)
+                yield scrapy.Request(url, self.parse_detail)
 
     def parse_detail(self,response):   
         item = WooyunItem()
@@ -51,3 +63,9 @@ class WooyunSpider(scrapy.Spider):
         else:
             item['image_urls']=[]
         return item
+
+    def __search_mongodb(self,wooyun_id):        
+        #
+        wooyun_id_exsist = True if self.collection.find({'wooyun_id':wooyun_id}).count()>0 else False
+        #
+        return wooyun_id_exsist

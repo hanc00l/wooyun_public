@@ -26,15 +26,21 @@ class MongoDBPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        wooyun_record = self.collection.find_one({'wooyun_id':item['wooyun_id']})
-        if wooyun_record == None:
-            post_data = copy.deepcopy(item)
-            post_data.pop('image_urls')
-            post_data.pop('images')
+        #
+        post_data = copy.deepcopy(item)
+        post_data.pop('image_urls')
+        post_data.pop('images')
+        #
+        wooyun_id_exsist = True if self.collection.find({'wooyun_id':item['wooyun_id']}).count()>0 else False
+        if wooyun_id_exsist == False:
             self.collection.insert_one(dict(post_data))
             self.log.debug('wooyun_id:%s added to mongdb!'%item['wooyun_id'],)
         else:
-            self.log.debug('wooyun_id:%s exist!' %item['wooyun_id'])
+            if spider.update:
+                self.collection.update_one({'wooyun_id':item['wooyun_id']},{'$set':dict(post_data)})
+                self.log.debug('wooyun_id:%s exist,update!' %item['wooyun_id'])
+            else:
+                self.log.debug('wooyun_id:%s exist,not update!' %item['wooyun_id'])
 
         return item
 
@@ -45,19 +51,23 @@ class WooyunSaveToLocalPipeline(object):
             return item
         #
         if item['wooyun_id'] == None or item['wooyun_id'] =='':
-            raise DropItem('There is none wooyun_id,this item do not be saved!')
+            self.log.debug('There is none wooyun_id,this item do not be saved!')
+            return item
         #
-        self.__process_html(item)
+        post_data = copy.deepcopy(item)
+        if self.__process_html(post_data) == False:
+            return item
         #
         path_name = settings['LOCAL_STORE'] + item['wooyun_id'] + '.html'
         with open(path_name,'w') as f:
-            f.write(item['html'])
+            f.write(post_data['html'])
         
         return item
 
     def __process_html(self,item):
         if item['html'] == None or item['html'] == '':
-            raise DropItem('the wooyunid:%s html body is empty!'%item['wooyun_id'])
+            self.log.debug('the wooyunid:%s html body is empty!'%item['wooyun_id'])
+            return False
         #deal the img
         for img in item['images']:
             item['html'] = re.sub('<img src=[\'\"]%s[\'\"]'%img['url'],'<img src=\'%s\''%img['path'],item['html'])
@@ -65,5 +75,7 @@ class WooyunSaveToLocalPipeline(object):
         item['html'] = re.sub(r'<link href=\"/css/style\.css','<link href=\"css/style.css',item['html'])
         #deal script
         item['html'] = re.sub(r'<script src=\"https://static\.wooyun\.org/static/js/jquery\-1\.4\.2\.min\.js','<script src=\"js/jquery-1.4.2.min.js',item['html'])
+
+        return True
         
 
