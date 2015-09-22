@@ -72,7 +72,7 @@ def search():
     #
     page_info = search_mongodb(keywords,page,search_by_html)
     #
-    return render_template('search.html',keywords=keywords,page_info=page_info,title=u'搜索结果-乌云公开漏洞搜索')
+    return render_template('search.html',keywords=keywords,page_info=page_info,search_by_html=search_by_html,title=u'搜索结果-乌云公开漏洞搜索')
 
 def main():
     app.run(debug=True)

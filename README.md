@@ -3,6 +3,9 @@
 
 **wooyun.org public bug(vulnerability) crawl and search**
 
+![index](index.png)
+![search](search.png)
+
 ### 1.安装相关组件
 + Python 2.7.X和pip
 + mongodb

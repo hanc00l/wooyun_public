@@ -50,12 +50,22 @@ class WooyunSpider(scrapy.Spider):
         item = WooyunItem()
         item['wooyun_id'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[1]/a/@href').extract()[0].split('/')[2]
         item['title'] = response.xpath('//title/text()').extract()[0].split("|")[0]
-        item['bug_type'] = response.xpath('//h3[@class="wybug_type"]/text()').extract()[0].split(u'：')[1].strip()       
-        item['author'] = response.xpath("//h3[@class='wybug_author']/a/text()").extract()[0]
+        #item['bug_type'] = response.xpath("//h3[@class='wybug_type']/text()").extract()[0].split(u'：')[1].strip()       
+        item['bug_type'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[7]/text()').extract()[0].split(u'：')[1].strip()       
+        #some author not text,for examp:
+        #http://wooyun.org/bugs/wooyun-2010-01010
+        #there will be error while parse author,so do this
+        try:
+            #item['author'] = response.xpath("//h3[@class='wybug_author']/a/text()").extract()[0]
+            item['author'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[4]/text()').extract()[0]
+        except:
+            item['author'] ='<Parse Error>'
         item['html'] = response.body
-        dt = response.xpath("//h3[@class='wybug_date']/text()").re("[\d+]{4}-[\d+]{2}-[\d+]{2}")[0].split('-')
+        #dt = response.xpath("//h3[@class='wybug_date']/text()").re("[\d+]{4}-[\d+]{2}-[\d+]{2}")[0].split('-')
+        dt = response.xpath('//*[@id="bugDetail"]/div[5]/h3[5]/text()').re("[\d+]{4}-[\d+]{2}-[\d+]{2}")[0].split('-')
         item['datetime'] = datetime(int(dt[0]),int(dt[1]),int(dt[2]))
-        dt = response.xpath("//h3[@class='wybug_open_date']/text()").re("[\d+]{4}-[\d+]{2}-[\d+]{2}")[0].split('-')
+        #dt = response.xpath("//h3[@class='wybug_open_date']/text()").re("[\d+]{4}-[\d+]{2}-[\d+]{2}")[0].split('-')
+        dt = response.xpath('//*[@id="bugDetail"]/div[5]/h3[6]/text()').re("[\d+]{4}-[\d+]{2}-[\d+]{2}")[0].split('-')
         item['datetime_open'] = datetime(int(dt[0]),int(dt[1]),int(dt[2]))
         #images url for download
         if self.local_store:
