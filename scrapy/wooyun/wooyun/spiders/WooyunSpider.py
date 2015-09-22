@@ -34,7 +34,7 @@ class WooyunSpider(scrapy.Spider):
         else:
             end_page = self.page_max
         for n in range(1,end_page + 1):         
-            page = r"/bugs/new_public/page/" + str(n)
+            page = "/bugs/new_public/page/%d" %n
             url = response.urljoin(page)
             yield scrapy.Request(url, self.parse_list)
     

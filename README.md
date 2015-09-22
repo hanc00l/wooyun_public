@@ -24,7 +24,7 @@
     
 + 第一次爬取全部内容时，用scrapy crawl wooyun -a page_max=0
   
-+ 平时只爬取最近的更新时，用scrapy crawl wooyun -a page_max=1 -a update=false，可以根据自己的爬取频率和网站更新情况调整page_max的值
++ 平时只爬取最近的更新时，用scrapy crawl wooyun -a page_max=1，可以根据自己的爬取频率和网站更新情况调整page_max的值
  
 + 全部公开漏洞的列表和每个漏洞的文本内容存在在mongodb中，大概约2G内容（到2015年9月），如果要爬全部文本和图片作为离线查询，要考虑足够的空间和时间
 
