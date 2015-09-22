@@ -3,6 +3,7 @@ import logging
 import re
 from datetime import datetime
 import copy
+import codecs
 import pymongo
 from scrapy.conf import settings
 from scrapy.exceptions import DropItem
@@ -59,7 +60,8 @@ class WooyunSaveToLocalPipeline(object):
             return item
         #
         path_name = settings['LOCAL_STORE'] + item['wooyun_id'] + '.html'
-        with open(path_name,'w') as f:
+        #save file as utf-8 format
+        with codecs.open(path_name,mode='w',encoding='utf-8',errors='ignore') as f:
             f.write(post_data['html'])
         
         return item

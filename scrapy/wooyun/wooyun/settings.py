@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'wooyun.spiders'
 
 #piplines
 ITEM_PIPELINES = {
-    'scrapy.contrib.pipeline.images.ImagesPipeline': 1,
+    'scrapy.pipelines.images.ImagesPipeline': 1,
     'wooyun.pipelines.MongoDBPipeline':100,
     'wooyun.pipelines.WooyunSaveToLocalPipeline':200
 }

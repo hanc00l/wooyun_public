@@ -10,7 +10,7 @@ class WooyunSpider(scrapy.Spider):
     name = "wooyun"
     allowed_domains = ["wooyun.org"]
     start_urls = [
-        'http://wooyun.org/bugs/new_public/'
+        'http://wooyun.org/bugs/new_public/'        
     ]
 
     def __init__(self,page_max=settings['PAGE_MAX_DEFAULT'],local_store=settings['LOCAL_STORE_DEFAULT'],\
@@ -26,7 +26,7 @@ class WooyunSpider(scrapy.Spider):
 
     def closed(self,reason):
         self.client.close()
-
+    
     def parse(self, response):
         total_pages = response.xpath("//p[@class='page']/text()").re('\d+')[1]
         if self.page_max == 0:
@@ -37,7 +37,7 @@ class WooyunSpider(scrapy.Spider):
             page = r"/bugs/new_public/page/" + str(n)
             url = response.urljoin(page)
             yield scrapy.Request(url, self.parse_list)
-
+    
     def parse_list(self,response):
         links = response.xpath('//tbody/tr/td/a/@href').extract()
         for url in links:  
@@ -46,7 +46,7 @@ class WooyunSpider(scrapy.Spider):
                 url = response.urljoin(url)
                 yield scrapy.Request(url, self.parse_detail)
 
-    def parse_detail(self,response):   
+    def parse_detail(self,response):  
         item = WooyunItem()
         item['wooyun_id'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[1]/a/@href').extract()[0].split('/')[2]
         item['title'] = response.xpath('//title/text()').extract()[0].split("|")[0]
@@ -60,7 +60,9 @@ class WooyunSpider(scrapy.Spider):
             item['author'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[4]/text()').extract()[0]
         except:
             item['author'] ='<Parse Error>'
-        item['html'] = response.body
+        #the response.body type is str,so we need to convert to utf-8
+        #if not utf-8,saving to mongodb may have some troubles
+        item['html'] = response.body.decode('utf-8','ignore')
         #dt = response.xpath("//h3[@class='wybug_date']/text()").re("[\d+]{4}-[\d+]{2}-[\d+]{2}")[0].split('-')
         dt = response.xpath('//*[@id="bugDetail"]/div[5]/h3[5]/text()').re("[\d+]{4}-[\d+]{2}-[\d+]{2}")[0].split('-')
         item['datetime'] = datetime(int(dt[0]),int(dt[1]),int(dt[2]))
