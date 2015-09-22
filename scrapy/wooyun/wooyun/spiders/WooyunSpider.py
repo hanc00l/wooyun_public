@@ -57,7 +57,7 @@ class WooyunSpider(scrapy.Spider):
         #there will be error while parse author,so do this
         try:
             #item['author'] = response.xpath("//h3[@class='wybug_author']/a/text()").extract()[0]
-            item['author'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[4]/text()').extract()[0]
+            item['author'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[4]/a/text()').extract()[0]
         except:
             item['author'] ='<Parse Error>'
         #the response.body type is str,so we need to convert to utf-8
