@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for wooyun project
+# Scrapy settings for wooyun_drops project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,32 +9,32 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'wooyun'
+BOT_NAME = 'wooyun_drops'
 
-SPIDER_MODULES = ['wooyun.spiders']
-NEWSPIDER_MODULE = 'wooyun.spiders'
+SPIDER_MODULES = ['wooyun_drops.spiders']
+NEWSPIDER_MODULE = 'wooyun_drops.spiders'
 
 #piplines
 ITEM_PIPELINES = {
     'scrapy.pipelines.images.ImagesPipeline': 1,
-    'wooyun.pipelines.MongoDBPipeline':100,
-    'wooyun.pipelines.WooyunSaveToLocalPipeline':200
+    'wooyun_drops.pipelines.MongoDBPipeline':100,
+    'wooyun_drops.pipelines.WooyunSaveToLocalPipeline':200
 }
 #the crawl default setting
 PAGE_MAX_DEFAULT = 1
 LOCAL_STORE_DEFAULT = 'false'
 UPDATE_DEFAULT = 'false'
 #save to local
-LOCAL_STORE='../../flask/static/bugs/'
+LOCAL_STORE='../../flask/static/drops/'
 #image store
 IMAGES_STORE = LOCAL_STORE
 #save to mongdodb
 MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
 MONGODB_DB = 'wooyun'
-MONGODB_COLLECTION = 'wooyun_list'
+MONGODB_COLLECTION = 'wooyun_drops'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'wooyun (+http://www.yourdomain.com)'
+#USER_AGENT = 'wooyun_drops (+http://www.yourdomain.com)'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS=32
@@ -62,13 +62,13 @@ MONGODB_COLLECTION = 'wooyun_list'
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'wooyun.middlewares.MyCustomSpiderMiddleware': 543,
+#    'wooyun_drops.middlewares.MyCustomSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'wooyun.middlewares.MyCustomDownloaderMiddleware': 543,
+#    'wooyun_drops.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -80,7 +80,7 @@ MONGODB_COLLECTION = 'wooyun_list'
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'wooyun.pipelines.SomePipeline': 300,
+#    'wooyun_drops.pipelines.SomePipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)

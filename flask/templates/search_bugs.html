@@ -4,7 +4,7 @@
 	  <div class="col-md-1"></div>
 	  <div class="col-md-10">
 		  <div>
-	  		<h2>关键字：{{keywords}} 的搜索结果<small>共{{page_info['total_rows']}}记录</small></h2>
+	  		<h2>关键字【{{keywords}}】的搜索结果<small>共{{page_info['total_rows']}}记录</small></h2>
 			  	<table class="table table-striped">
 			  	<tr>
 			  		<th width="10%">提交时间</th>
@@ -17,14 +17,14 @@
 			  		<td>{{row['datetime']}}</td>
 			  		<td><a href="http://www.wooyun.org/bugs/{{row['wooyun_id']}}" target="_blank">
 			  			{{row['title']}}</a></td>
-			  		<td><a href="static/{{row['wooyun_id']}}.html" target="_blank">{{row['bug_type']}}</a></td>
+			  		<td><a href="static/bugs/{{row['wooyun_id']}}.html" target="_blank">{{row['bug_type']}}</a></td>
 
 			  		<td>{{row['author']}}</td>
 			  	</tr>
 			  	{% endfor %}
 				</table>
 				<!-- 分页组件js -->
-				<script src="static/js/jquery.twbsPagination.js"></script>
+				<script src="static/bugs/js/jquery.twbsPagination.js"></script>
 				<ul id="pagination" class="pagination-sm"></ul>
 				<script >
 					 $(pagination).twbsPagination({
@@ -36,7 +36,7 @@
 				        visiblePages: 5,
 				        startPage: {{page_info['current']}},
 				        onPageClick: function (event, page) {
-				            location.href="/search?keywords={{keywords}}&&search_by_html={{search_by_html}}&&page="+page;
+				            location.href="/search?keywords={{keywords}}&&content_search_by=by_bugs&&search_by_html={{search_by_html}}&&page="+page;
 				        }
 				    });
 				</script>

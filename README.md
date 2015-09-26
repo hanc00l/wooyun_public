@@ -1,7 +1,7 @@
 # wooyun_public 
-**乌云公开漏洞爬虫和搜索**
+**乌云公开漏洞、知识库爬虫和搜索**
 
-**wooyun.org public bug(vulnerability) crawl and search**
+**crawl and search for wooyun.org public bug(vulnerability) and drops**
 
 ![index](index.png)
 ![search](search.png)
@@ -13,8 +13,10 @@
 + Flask (pip install Flask)
 + pymongo (pip install pymongo) 
 
-### 2.爬取wooyun公开漏洞
-+ 在scrapy/wooyun下运行scrapy crawl wooyun -a page_max=1  -a local_store=false -a update=false，有三个参数用于控制爬取：
+### 2.爬虫
++ 乌云公开漏洞和知识库的爬虫分别位于目录scrapy/wooyun和scrapy/wooyun_drops
+
++ 运行scrapy crawl wooyun -a page_max=1  -a local_store=false -a update=false，有三个参数用于控制爬取：
 
     -a page_max: 控制爬取的页数，默认为1，如果值为0，表示所有页面
     
@@ -28,7 +30,7 @@
  
 + 全部公开漏洞的列表和每个漏洞的文本内容存在在mongodb中，大概约2G内容（到2015年9月），如果要爬全部文本和图片作为离线查询，要考虑足够的空间和时间
 
-### 3.漏洞搜索 
+### 3.搜索 
 + 漏洞搜索使用了Flask作为web server，bootstrap作为前端
 
 + 启动web server ：在flask目录下运行python app.py，默认端口是5000
@@ -37,6 +39,6 @@
 
 ### 4.其它
 
-+ 本程序只用于技术研究和个人使用，程序组件均为开源程序，漏洞来源于乌云公开漏洞，版权归wooyun.org
++ 本程序只用于技术研究和个人使用，程序组件均为开源程序，漏洞和知识库来源于乌云公开漏洞，版权归wooyun.org
 
 + hancool@163.com 2015.9
