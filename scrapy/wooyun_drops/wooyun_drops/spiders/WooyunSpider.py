@@ -12,6 +12,7 @@ class WooyunSpider(scrapy.Spider):
     allowed_domains = ["wooyun.org"]
     start_urls = [
         'http://drops.wooyun.org/'        
+        #'http://drops.wooyun.org/papers/8989'
     ]
 
     def __init__(self,page_max=settings['PAGE_MAX_DEFAULT'],local_store=settings['LOCAL_STORE_DEFAULT'],\
@@ -46,17 +47,27 @@ class WooyunSpider(scrapy.Spider):
             url = response.urljoin(url)
             if self.update or not self.__search_mongodb(url):
                 yield scrapy.Request(url, self.parse_detail)
-    
+    #def parse(self,response):
     def parse_detail(self,response):  
         item = WooyunItem()
         item['url'] = unquote(response.url)
         item['category'] = unquote(response.url).split('//')[1].split('/')[1]
         item['title'] = response.xpath("//title/text()").extract()[0].split(u"|")[0].strip()
         item['author'] = response.xpath("//div[@class = 'entry-meta']/a/@href").extract()[0].split("/")[2]
-        dt = response.xpath("//div[@class = 'entry-meta']/time/text()").extract()[0].split(' ')[0].split('/')       
-        item['datetime'] = datetime(int(dt[0]),int(dt[1]),int(dt[2]))
+        dt = response.xpath("//div[@class = 'entry-meta']/time/text()").extract()[0].split(' ')[0].split('/')
+        dt_time = response.xpath("//div[@class = 'entry-meta']/time/text()").extract()[0].split(' ')[1].split(':')              
+        item['datetime'] = datetime(int(dt[0]),int(dt[1]),int(dt[2]),int(dt_time[0]),int(dt_time[1]))
         if self.local_store:
-            item['image_urls'] = response.xpath("//p/img/@src").extract()
+            item['image_urls'] = []
+            image_urls = response.xpath("//p/img/@src").extract()
+            '''
+            #download the image of 'https://quip.com/blob/' fail,so skip the image download
+            for u in image_urls:
+                if 'https://quip.com/blog' in u:
+                    continue
+                item['image_urls'].append(u)
+            '''
+            item['image_urls'] = image_urls
         else:
             item['image_urls']=[]
         item['html'] = response.body.decode('utf-8','ignore')
