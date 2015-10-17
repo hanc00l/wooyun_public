@@ -10,7 +10,7 @@ class WooyunSpider(scrapy.Spider):
     name = "wooyun"
     allowed_domains = ["wooyun.org"]
     start_urls = [
-        'http://wooyun.org/bugs/new_public/'        
+        'http://wooyun.org/bugs/new_public/'
     ]
 
     def __init__(self,page_max=settings['PAGE_MAX_DEFAULT'],local_store=settings['LOCAL_STORE_DEFAULT'],\
@@ -26,32 +26,32 @@ class WooyunSpider(scrapy.Spider):
 
     def closed(self,reason):
         self.client.close()
-    
+
     def parse(self, response):
         total_pages = response.xpath("//p[@class='page']/text()").re('\d+')[1]
         if self.page_max == 0:
             end_page = int(total_pages)
         else:
             end_page = self.page_max
-        for n in range(1,end_page + 1):         
+        for n in range(1,end_page + 1):
             page = "/bugs/new_public/page/%d" %n
             url = response.urljoin(page)
             yield scrapy.Request(url, self.parse_list)
-    
+
     def parse_list(self,response):
         links = response.xpath('//tbody/tr/td/a/@href').extract()
-        for url in links:  
+        for url in links:
             wooyun_id = url.split('/')[2]
             if self.update == True or self.__search_mongodb(wooyun_id) == False:
                 url = response.urljoin(url)
                 yield scrapy.Request(url, self.parse_detail)
 
-    def parse_detail(self,response):  
+    def parse_detail(self,response):
         item = WooyunItem()
         item['wooyun_id'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[1]/a/@href').extract()[0].split('/')[2]
         item['title'] = response.xpath('//title/text()').extract()[0].split("|")[0]
-        #item['bug_type'] = response.xpath("//h3[@class='wybug_type']/text()").extract()[0].split(u'：')[1].strip()       
-        item['bug_type'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[7]/text()').extract()[0].split(u'：')[1].strip()       
+        item['bug_type'] = response.xpath("//h3[@class='wybug_type']/text()").extract()[0].split(u'：')[1].strip()       
+        #item['bug_type'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[7]/text()').extract()[0].split(u'：')[1].strip()
         #some author not text,for examp:
         #http://wooyun.org/bugs/wooyun-2010-01010
         #there will be error while parse author,so do this
@@ -76,7 +76,7 @@ class WooyunSpider(scrapy.Spider):
             item['image_urls']=[]
         return item
 
-    def __search_mongodb(self,wooyun_id):        
+    def __search_mongodb(self,wooyun_id):
         #
         wooyun_id_exsist = True if self.collection.find({'wooyun_id':wooyun_id}).count()>0 else False
         #
