@@ -86,7 +86,7 @@ def search():
     return render_template(content[content_search_by]['template_html'],keywords=keywords,page_info=page_info,search_by_html=search_by_html,title=u'搜索结果-乌云公开漏洞、知识库搜索')
 
 def main():
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)
 
 if __name__ == '__main__':
 	main()
