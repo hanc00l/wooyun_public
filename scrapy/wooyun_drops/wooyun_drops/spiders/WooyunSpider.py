@@ -56,15 +56,13 @@ class WooyunSpider(scrapy.Spider):
         dt = response.xpath("//div[@class = 'entry-meta']/time/text()").extract()[0].split(' ')[0].split('/')
         dt_time = response.xpath("//div[@class = 'entry-meta']/time/text()").extract()[0].split(' ')[1].split(':')
         item['datetime'] = datetime(int(dt[0]),int(dt[1]),int(dt[2]),int(dt_time[0]),int(dt_time[1]))
+        item['image_urls'] = []
         if self.local_store:
-            item['image_urls'] = []
             image_urls = response.xpath("//p/img/@src").extract()
             #scrapy can'nt get https page,so so skip the https image download
             for u in image_urls:
                 if 'https://' not in u:
                     item['image_urls'].append(u)
-        else:
-            item['image_urls']=[]
 
         item['html'] = response.body.decode('utf-8','ignore')
 

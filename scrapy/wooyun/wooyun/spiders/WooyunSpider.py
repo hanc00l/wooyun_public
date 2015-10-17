@@ -50,7 +50,7 @@ class WooyunSpider(scrapy.Spider):
         item = WooyunItem()
         item['wooyun_id'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[1]/a/@href').extract()[0].split('/')[2]
         item['title'] = response.xpath('//title/text()').extract()[0].split("|")[0]
-        item['bug_type'] = response.xpath("//h3[@class='wybug_type']/text()").extract()[0].split(u'：')[1].strip()       
+        item['bug_type'] = response.xpath("//h3[@class='wybug_type']/text()").extract()[0].split(u'：')[1].strip()
         #item['bug_type'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[7]/text()').extract()[0].split(u'：')[1].strip()
         #some author not text,for examp:
         #http://wooyun.org/bugs/wooyun-2010-01010
@@ -70,10 +70,12 @@ class WooyunSpider(scrapy.Spider):
         dt = response.xpath('//*[@id="bugDetail"]/div[5]/h3[6]/text()').re("[\d+]{4}-[\d+]{2}-[\d+]{2}")[0].split('-')
         item['datetime_open'] = datetime(int(dt[0]),int(dt[1]),int(dt[2]))
         #images url for download
+        item['image_urls']=[]
         if self.local_store:
-            item['image_urls'] = response.xpath("//img[contains(@src, 'http://static.wooyun.org/wooyun/upload/')]/@src").extract()
-        else:
-            item['image_urls']=[]
+            image_urls = response.xpath("//img[contains(@src, 'http://static.wooyun.org/wooyun/upload/')]/@src").extract()
+            for u in image_urls:
+                if 'https://' not in u:
+                    item['image_urls'].append(u)
         return item
 
     def __search_mongodb(self,wooyun_id):
