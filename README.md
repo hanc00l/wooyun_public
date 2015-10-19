@@ -14,6 +14,8 @@
 + pymongo (pip install pymongo) 
 
 ### 2.爬虫
++ **在爬取内容和查询时，请先启动mongodb数据库：mongod &**
+
 + 乌云公开漏洞和知识库的爬虫分别位于目录scrapy/wooyun和scrapy/wooyun_drops
 
 + 运行scrapy crawl wooyun -a page_max=1  -a local_store=false -a update=false，有三个参数用于控制爬取：
@@ -24,7 +26,7 @@
     
     -a update：控制是否重复爬取，默认为false
     
-+ 第一次爬取全部内容时，用scrapy crawl wooyun -a page_max=0
++ 第一次爬取全部内容时，用scrapy crawl wooyun -a page_max=0 -a update=true
   
 + 平时只爬取最近的更新时，用scrapy crawl wooyun -a page_max=1，可以根据自己的爬取频率和网站更新情况调整page_max的值
  
@@ -37,7 +39,17 @@
 
 + 搜索：在浏览器通过http://localhost:5000进行搜索漏洞，多个关键字可以用空格分开。
 
-### 4.其它
+### 4.为mongodb数据库创建索引（可选，以下为命令行操作）
+	mongo
+	use wooyun
+	db.wooyun_list.ensureIndex({"datetime":1})
+	db.wooyun_list.ensureIndex({"datetime":1,"title":1})
+	db.wooyun_list.ensureIndex({"datetime":1,"html":1})
+	db.wooyun_drops.ensureIndex({"datetime":1})
+	db.wooyun_drops.ensureIndex({"datetime":1,"title":1})
+	db.wooyun_drops.ensureIndex({"datetime":1,"html":1})
+
+### 5.其它
 
 + 本程序只用于技术研究和个人使用，程序组件均为开源程序，漏洞和知识库来源于乌云公开漏洞，版权归wooyun.org
 
