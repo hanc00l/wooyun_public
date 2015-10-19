@@ -14,7 +14,7 @@
 + pymongo (pip install pymongo) 
 
 ### 2.爬虫
-+ **在爬取内容和查询时，请先启动mongodb数据库：mongod &**
++ **在爬取内容时，请先启动mongodb数据库：mongod &**
 
 + 乌云公开漏洞和知识库的爬虫分别位于目录scrapy/wooyun和scrapy/wooyun_drops
 
@@ -30,10 +30,12 @@
   
 + 平时只爬取最近的更新时，用scrapy crawl wooyun -a page_max=1，可以根据自己的爬取频率和网站更新情况调整page_max的值
  
-+ 全部公开漏洞的列表和每个漏洞的文本内容存在在mongodb中，大概约2G内容（到2015年9月），如果要爬全部文本和图片作为离线查询，要考虑足够的空间和时间
++ 全部公开漏洞的列表和每个漏洞的文本内容存在mongodb中，大概约2G内容；如果整站爬全部文本和图片作为离线查询，大概需要10G空间、2小时（10M电信带宽）；爬取全部知识库，总共约500M空间。（截止2015年10月）
 
 ### 3.搜索 
 + 漏洞搜索使用了Flask作为web server，bootstrap作为前端
+
++ **在搜索时，请确定已启动了mongodb数据库：mongod &**
 
 + 启动web server ：在flask目录下运行python app.py，默认端口是5000
 
