@@ -45,11 +45,7 @@
 	mongo
 	use wooyun
 	db.wooyun_list.ensureIndex({"datetime":1})
-	db.wooyun_list.ensureIndex({"datetime":1,"title":1})
-	db.wooyun_list.ensureIndex({"datetime":1,"html":1})
 	db.wooyun_drops.ensureIndex({"datetime":1})
-	db.wooyun_drops.ensureIndex({"datetime":1,"title":1})
-	db.wooyun_drops.ensureIndex({"datetime":1,"html":1})
 
 ### 5.其它
 
