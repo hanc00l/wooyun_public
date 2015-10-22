@@ -47,7 +47,20 @@
 	db.wooyun_list.ensureIndex({"datetime":1})
 	db.wooyun_drops.ensureIndex({"datetime":1})
 
-### 5.其它
+### 5.虚拟机
+
++ 为方便使用，已打包了一个安装了所有组件和程序的虚拟机，网盘地址为：[http://pan.baidu.com/s/1sj67KDZ](http://pan.baidu.com/s/1sj67KDZ) 密码：bafi
+	
++ 使用方法：
+		
+		1、使用vmware或virtualbox导入虚拟机
+		2、登录用户名hancool,密码qwe123
+		3、分别进入wooyun_public目录下的wooyun和wooyun_drops，运行爬虫爬取数据（爬取全部数据并且本地离线缓存）：scrapy crawl wooyun -a  page_max=0 -a local_store=true -a update=true
+		4、进入wooyun_publich目录下的flask，运行./app.py，启动web服务
+		5、打开浏览器，输入http://ip:5000，ip为虚拟机的网卡地址（如果是vmware，则使用ifconfig eth0查看，如果是virtualbox为192.168.56.130）
+
+
+### 6.其它
 
 + 本程序只用于技术研究和个人使用，程序组件均为开源程序，漏洞和知识库来源于乌云公开漏洞，版权归wooyun.org
 
