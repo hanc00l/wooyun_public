@@ -7,10 +7,10 @@
 ![search](search.png)
 
 ### 1.安装相关组件
-+ Python 2.7.X和pip
++ python 2.7和pip
 + mongodb
 + scrapy (pip install scrapy)
-+ Flask (pip install Flask)
++ flask (pip install Flask)
 + pymongo (pip install pymongo) 
 
 ### 2.爬虫

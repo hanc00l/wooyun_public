@@ -46,7 +46,8 @@ class WooyunSpider(scrapy.Spider):
                 url = response.urljoin(url)
                 yield scrapy.Request(url, self.parse_detail)
 
-    def parse_detail(self,response):
+    def parse(self, response):
+    #def parse_detail(self,response):
         item = WooyunItem()
         item['wooyun_id'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[1]/a/@href').extract()[0].split('/')[2]
         item['title'] = response.xpath('//title/text()').extract()[0].split("|")[0]
@@ -72,10 +73,16 @@ class WooyunSpider(scrapy.Spider):
         #images url for download
         item['image_urls']=[]
         if self.local_store:
-            image_urls = response.xpath("//img[contains(@src, 'http://static.wooyun.org/wooyun/upload/')]/@src").extract()
+            #乌云图片目前发两种格式，一种是http://static.wooyun.org/wooyun/upload/,另一格式是/upload/...
+            #因此，对后一种在爬取时，增加http://www.wooyun.org，以形成完整的url地址
+            #同时，在piplines.py存放时，作相应的反向处理
+            image_urls = response.xpath("//img[contains(@src, '/upload/')]/@src").extract()
             for u in image_urls:
-                if 'https://' not in u:
-                    item['image_urls'].append(u)
+                if u.startswith('https://'):
+                    continue
+                if u.startswith('/'):
+                    u = 'http://www.wooyun.org' + u
+                item['image_urls'].append(u)
         return item
 
     def __search_mongodb(self,wooyun_id):

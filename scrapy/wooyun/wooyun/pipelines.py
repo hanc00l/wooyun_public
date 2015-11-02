@@ -16,7 +16,7 @@ from scrapy.exceptions import DropItem
 class MongoDBPipeline(object):
     def __init__(self):
         self.connection_string = "mongodb://%s:%d" % (settings['MONGODB_SERVER'],settings['MONGODB_PORT'])
-   
+
     def open_spider(self, spider):
         self.client = pymongo.MongoClient(self.connection_string)
         self.db = self.client[settings['MONGODB_DB']]
@@ -63,7 +63,7 @@ class WooyunSaveToLocalPipeline(object):
         #save file as utf-8 format
         with codecs.open(path_name,mode='w',encoding='utf-8',errors='ignore') as f:
             f.write(post_data['html'])
-        
+
         return item
 
     def __process_html(self,item):
@@ -72,6 +72,9 @@ class WooyunSaveToLocalPipeline(object):
             return False
         #deal the img
         for img in item['images']:
+            #处理部份图片存放于http://www.wooyun.org时，使用/upload/..形式的路径
+            if img['url'].startswith('http://www.wooyun.org'):
+                img['url'] = img['url'].replace('http://www.wooyun.org','')
             item['html'] = re.sub('<img src=[\'\"]%s[\'\"]'%img['url'],'<img src=\'%s\''%img['path'],item['html'])
         #deal css
         item['html'] = re.sub(r'<link href=\"/css/style\.css','<link href=\"css/style.css',item['html'])
@@ -79,5 +82,3 @@ class WooyunSaveToLocalPipeline(object):
         item['html'] = re.sub(r'<script src=\"https://static\.wooyun\.org/static/js/jquery\-1\.4\.2\.min\.js','<script src=\"js/jquery-1.4.2.min.js',item['html'])
 
         return True
-        
-
