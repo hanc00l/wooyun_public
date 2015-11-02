@@ -46,8 +46,7 @@ class WooyunSpider(scrapy.Spider):
                 url = response.urljoin(url)
                 yield scrapy.Request(url, self.parse_detail)
 
-    def parse(self, response):
-    #def parse_detail(self,response):
+    def parse_detail(self,response):
         item = WooyunItem()
         item['wooyun_id'] = response.xpath('//*[@id="bugDetail"]/div[5]/h3[1]/a/@href').extract()[0].split('/')[2]
         item['title'] = response.xpath('//title/text()').extract()[0].split("|")[0]
