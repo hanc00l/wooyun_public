@@ -22,7 +22,7 @@ ITEM_PIPELINES = {
 }
 #the crawl default setting
 PAGE_MAX_DEFAULT = 1
-LOCAL_STORE_DEFAULT = 'false'
+LOCAL_STORE_DEFAULT = 'true'
 UPDATE_DEFAULT = 'false'
 #save to local
 LOCAL_STORE='../../flask/static/drops/'

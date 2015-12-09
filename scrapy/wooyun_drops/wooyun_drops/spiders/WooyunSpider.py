@@ -59,9 +59,10 @@ class WooyunSpider(scrapy.Spider):
         item['image_urls'] = []
         if self.local_store:
             image_urls = response.xpath("//p/img/@src").extract()
-            #scrapy can'nt get https page,so so skip the https image download
+            #skip the https image download
+            #skip www.quip.com,can'n be downloaded
             for u in image_urls:
-                if 'https://' not in u:
+                if 'https://' not in u and 'www.quip.com' not in u:
                     item['image_urls'].append(u)
 
         item['html'] = response.body.decode('utf-8','ignore')

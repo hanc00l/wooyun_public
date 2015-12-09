@@ -79,6 +79,9 @@ class WooyunSpider(scrapy.Spider):
             for u in image_urls:
                 if u.startswith('https://'):
                     continue
+                #skip www.quip.com, can'nt be downloaded
+                if 'www.quip.com' in u:
+                    continue
                 if u.startswith('/'):
                     u = 'http://www.wooyun.org' + u
                 item['image_urls'].append(u)

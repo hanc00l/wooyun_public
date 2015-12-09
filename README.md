@@ -55,9 +55,10 @@
 		
 		1、使用vmware或virtualbox导入虚拟机
 		2、登录用户名hancool,密码qwe123
-		3、分别进入wooyun_public目录下的wooyun和wooyun_drops，运行爬虫爬取数据（爬取全部数据并且本地离线缓存）：scrapy crawl wooyun -a  page_max=0 -a local_store=true -a update=true
-		4、进入wooyun_publich目录下的flask，运行./app.py，启动web服务
-		5、打开浏览器，输入http://ip:5000，ip为虚拟机的网卡地址（如果是vmware，则使用ifconfig eth0查看，如果是virtualbox为192.168.56.130）
+		3、进入wooyun_public目录，先用git更新一下到最新的代码git pull
+		4、分别进入wooyun_public目录下的wooyun和wooyun_drops，运行爬虫爬取数据（爬取全部数据并且本地离线缓存）：scrapy crawl wooyun -a  page_max=0 -a local_store=true -a update=true
+		5、进入wooyun_publich目录下的flask，运行./app.py，启动web服务
+		6、打开浏览器，输入http://ip:5000，ip为虚拟机的网卡地址（如果是vmware，则使用ifconfig eth0查看，如果是virtualbox为192.168.56.130）
 
 
 ### 6.其它
