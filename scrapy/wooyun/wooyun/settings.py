@@ -33,6 +33,10 @@ MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
 MONGODB_DB = 'wooyun'
 MONGODB_COLLECTION = 'wooyun_list'
+#image ignored downoading
+IMAGE_DOWLOAD_IGNORED = {
+    'www.quip.com'
+}
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'wooyun (+http://www.yourdomain.com)'
 

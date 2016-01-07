@@ -77,16 +77,20 @@ class WooyunSpider(scrapy.Spider):
             #同时，在piplines.py存放时，作相应的反向处理
             image_urls = response.xpath("//img[contains(@src, '/upload/')]/@src").extract()
             for u in image_urls:
-                if u.startswith('https://'):
-                    continue
-                #skip www.quip.com, can'nt be downloaded
-                if 'www.quip.com' in u:
+                if self.__check_ingnored_image(u):
                     continue
                 if u.startswith('/'):
                     u = 'http://www.wooyun.org' + u
                 item['image_urls'].append(u)
         return item
 
+    def __check_ingnored_image(self,image_url):
+        for ignored_url in settings['IMAGE_DOWLOAD_IGNORED']:
+            if ignored_url in image_url:
+                return True
+
+        return False
+        
     def __search_mongodb(self,wooyun_id):
         #
         wooyun_id_exsist = True if self.collection.find({'wooyun_id':wooyun_id}).count()>0 else False
