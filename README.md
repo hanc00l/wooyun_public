@@ -49,9 +49,11 @@
 
 ### 5.虚拟机
 
-+ 为方便使用，已打包了一个安装了所有组件和程序的虚拟机，网盘地址为：[http://pan.baidu.com/s/1sj67KDZ](http://pan.baidu.com/s/1sj67KDZ) 密码：bafi
++ 虚拟机1：在2016年6月底爬的wooyun全部漏洞库和知识库内容，总共30G，网盘地址为： [http://pan.baidu.com/s/1o7IEaAQ](http://pan.baidu.com/s/1o7IEaAQ) 提取密码：d4cq 
+
++ 虚拟机2：已打包了一个安装了所有组件和程序的虚拟机（不包含具体内容），网盘地址为：[http://pan.baidu.com/s/1sj67KDZ](http://pan.baidu.com/s/1sj67KDZ) 密码：bafi
 	
-+ 使用方法：
++ 虚拟机使用方法：
 		
 		1、使用vmware或virtualbox导入虚拟机
 		2、登录用户名hancool,密码qwe123
