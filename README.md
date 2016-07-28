@@ -49,7 +49,7 @@
 
 ### 5.虚拟机
 
-+ 虚拟机1：在2016年6月底爬的wooyun全部漏洞库和知识库内容，总共30G，网盘地址为： [http://pan.baidu.com/s/1o7IEaAQ](http://pan.baidu.com/s/1o7IEaAQ) 提取密码：d4cq 
++ 虚拟机1：在2016年6月底爬的wooyun全部漏洞库和知识库内容，总共30G。上传的文件有点问题，分卷有错误，我正在重新上传一次，7月29号应该能传完,请暂时不要下载这一个！请暂时不要下载这一个！请暂时不要下载这一个！（网盘地址为： [http://pan.baidu.com/s/1o7IEaAQ](http://pan.baidu.com/s/1o7IEaAQ) 提取密码：d4cq） 
 
 + 虚拟机2：已打包了一个安装了所有组件和程序的虚拟机（不包含具体内容），网盘地址为：[http://pan.baidu.com/s/1sj67KDZ](http://pan.baidu.com/s/1sj67KDZ) 密码：bafi
 	
