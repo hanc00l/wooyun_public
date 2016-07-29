@@ -4,3 +4,5 @@ flask/static/drops/运维安全-2547.html
 *.html
 
 *.jpg
+
+*.pyc

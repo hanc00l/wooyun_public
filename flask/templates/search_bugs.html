@@ -15,10 +15,9 @@
 			  	{% for row in page_info['rows'] %}
 			  	<tr>
 			  		<td>{{row['datetime']}}</td>
-			  		<td><a href="http://www.wooyun.org/bugs/{{row['wooyun_id']}}" target="_blank">
+			  		<td><a href="static/bugs/{{row['wooyun_id']}}.html" target="_blank">
 			  			{{row['title']}}</a></td>
-			  		<td><a href="static/bugs/{{row['wooyun_id']}}.html" target="_blank">{{row['bug_type']}}</a></td>
-
+			  		<td><a href="http://www.wooyun.org/bugs/{{row['wooyun_id']}}" target="_blank">{{row['bug_type']}}</a></td>
 			  		<td>{{row['author']}}</td>
 			  	</tr>
 			  	{% endfor %}

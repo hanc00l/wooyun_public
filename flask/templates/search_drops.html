@@ -15,9 +15,9 @@
 			  	{% for row in page_info['rows'] %}
 			  	<tr>
 			  		<td>{{row['datetime']}}</td>
-			  		<td><a href="{{row['url']}}" target="_blank">
+			  		<td><a href="static/drops/{{row['url_local']}}" target="_blank">
 			  			{{row['title']}}</a></td>
-			  		<td><a href="static/drops/{{row['url_local']}}" target="_blank">{{row['category']}}</a></td>
+			  		<td><a href="{{row['url']}}" target="_blank">{{row['category']}}</a></td>
 
 			  		<td>{{row['author']}}</td>
 			  	</tr>
