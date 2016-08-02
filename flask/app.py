@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 import math
 import re
+import time
 import pymongo
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 # setting:
@@ -11,6 +12,9 @@ MONGODB_DB = 'wooyun'
 MONGODB_COLLECTION_BUGS = 'wooyun_list'
 MONGODB_COLLECTION_DROPS = 'wooyun_drops'
 ROWS_PER_PAGE = 20
+#search engine,if has install elasticsearch and mongo-connector,please use elasicsearch for full text search
+#else set False
+SEARCH_BY_ES = False
 # flask app:
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -64,6 +68,63 @@ def search_mongodb(keywords, page, content_search_by, search_by_html):
     #
     return page_info
 
+def search_mongodb_by_es(keywords, page, content_search_by, search_by_html):
+    from elasticsearch import Elasticsearch
+
+    field_name = 'html' if search_by_html else 'title'
+    page_info = {'current': page, 'total': 0,
+                 'total_rows': 0, 'rows': []}
+    # get the page rows
+    if page >= 1 :
+        row_start = (page - 1) * app.config['ROWS_PER_PAGE']
+        #get elasticsearch in localhost:9200
+        es = Elasticsearch()
+        if keywords.strip() == '':
+            query_dsl = {
+                "query":    {
+                    "filtered": {
+                        "query":    {   
+                            "match_all":{ }
+                        }
+                    }
+                },
+                "sort": {"datetime":   {   "order":    "desc"  }},
+                "from": row_start,
+                "size": app.config['ROWS_PER_PAGE']
+            }
+        else:   
+            query_dsl = {
+                "query":    {
+                    "filtered": {
+                        "query":    {   
+                            "match":{ 
+                                field_name : {
+                                    'query':keywords,
+                                    'operator':'and'
+                                }
+                            }
+                        }
+                    }
+                },
+                "sort": {"datetime":   {   "order":    "desc"  }},
+                "from": row_start,
+                "size": app.config['ROWS_PER_PAGE']
+            }
+        res = es.search(body=query_dsl,index=app.config['MONGODB_DB'],doc_type=content[content_search_by]['mongodb_collection'])
+        #get total rows and pages
+        page_info['total_rows'] = res['hits']['total']
+        page_info['total'] = int(math.ceil(page_info['total_rows'] / (app.config['ROWS_PER_PAGE'] * 1.0)))
+        #get everyone row set
+        for doc in res['hits']['hits']:
+            c = doc['_source']
+            c['datetime'] = time.strftime('%Y-%m-%d',time.strptime(c['datetime'],'%Y-%m-%dT%H:%M:%S'))
+            if 'url' in c:
+                    urlsep = c['url'].split('//')[1].split('/')
+                    c['url_local'] = '%s-%s.html' % (urlsep[1], urlsep[2])
+            page_info['rows'].append(c)
+    
+    return page_info
+
 
 def get_wooyun_total_count():
     client = pymongo.MongoClient(connection_string)
@@ -92,15 +153,18 @@ def search():
     content_search_by = request.args.get('content_search_by', 'by_bugs')
     if page < 1:
         page = 1
-    #
-    page_info = search_mongodb(
-        keywords, page, content_search_by, search_by_html)
+    #if there is elasticsearch config ,then the fulltext search by es
+    #else by mongodb search
+    if app.config['SEARCH_BY_ES'] is True and search_by_html is True:
+        page_info = search_mongodb_by_es(keywords, page, content_search_by, search_by_html)
+    else:
+        page_info = search_mongodb(keywords, page, content_search_by, search_by_html)
     #
     return render_template(content[content_search_by]['template_html'], keywords=keywords, page_info=page_info, search_by_html=search_by_html, title=u'搜索结果-乌云公开漏洞、知识库搜索')
 
 
 def main():
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=False)
 
 if __name__ == '__main__':
     main()
