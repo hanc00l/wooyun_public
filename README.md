@@ -53,7 +53,7 @@ db.wooyun_drops.ensureIndex({"datetime":1})
 5.虚拟机
 ------
 
-+ 虚拟机1：在2016年6月底爬的wooyun全部漏洞库和知识库内容，总共30G（压缩后约11G），网盘地址为： [http://pan.baidu.com/s/1o7IEaAQ](http://pan.baidu.com/s/1o7IEaAQ) 提取密码：d4cq 
++ 虚拟机1：在2016年6月底爬的wooyun全部漏洞库和知识库内容，总共30G（压缩后约11G），网盘地址为： [http://pan.baidu.com/s/1kVdJuNd](http://pan.baidu.com/s/1kVdJuNd) 提取密码hn9d（8.3更新） 
 
 	使用方法：
 			
