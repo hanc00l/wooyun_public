@@ -3,6 +3,7 @@
 import math
 import re
 import time
+import urllib2
 import pymongo
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 # setting:
@@ -12,9 +13,12 @@ MONGODB_DB = 'wooyun'
 MONGODB_COLLECTION_BUGS = 'wooyun_list'
 MONGODB_COLLECTION_DROPS = 'wooyun_drops'
 ROWS_PER_PAGE = 20
-#search engine,if has install elasticsearch and mongo-connector,please use elasicsearch for full text search
-#else set False
-SEARCH_BY_ES = False
+ELASTICSEARCH_HOST = 'localhost:9200'
+#ELASTICSEARCH CHOOSE
+#   auto:   auto detect elasticsearch ,if opened then use elasticsearch,else use mongodb
+#   yes:    always use elasticsearch
+#   no:     not use elasticsearch    
+SEARCH_BY_ES = 'auto'
 # flask app:
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -77,8 +81,7 @@ def search_mongodb_by_es(keywords, page, content_search_by, search_by_html):
     # get the page rows
     if page >= 1 :
         row_start = (page - 1) * app.config['ROWS_PER_PAGE']
-        #get elasticsearch in localhost:9200
-        es = Elasticsearch()
+        es = Elasticsearch([app.config['ELASTICSEARCH_HOST'],])
         if keywords.strip() == '':
             query_dsl = {
                 "query":    {
@@ -97,7 +100,7 @@ def search_mongodb_by_es(keywords, page, content_search_by, search_by_html):
                 "query":    {
                     "filtered": {
                         "query":    {   
-                            "match":{ 
+                            "match":    { 
                                 field_name : {
                                     'query':keywords,
                                     'operator':'and'
@@ -125,6 +128,15 @@ def search_mongodb_by_es(keywords, page, content_search_by, search_by_html):
     
     return page_info
 
+def check_elastichsearch_open():
+    try:
+        html = urllib2.urlopen('http://%s' %app.config['ELASTICSEARCH_HOST']).read()
+        if len(html) > 0:
+            return True
+        else:
+            return False
+    except:
+        return False
 
 def get_wooyun_total_count():
     client = pymongo.MongoClient(connection_string)
@@ -153,9 +165,8 @@ def search():
     content_search_by = request.args.get('content_search_by', 'by_bugs')
     if page < 1:
         page = 1
-    #if there is elasticsearch config ,then the fulltext search by es
-    #else by mongodb search
-    if app.config['SEARCH_BY_ES'] is True and search_by_html is True:
+    #search by elasticsearch or mongo
+    if app.config['SEARCH_BY_ES'] == 'yes' or ( app.config['SEARCH_BY_ES'] == 'auto' and check_elastichsearch_open() is True ):
         page_info = search_mongodb_by_es(keywords, page, content_search_by, search_by_html)
     else:
         page_info = search_mongodb(keywords, page, content_search_by, search_by_html)
