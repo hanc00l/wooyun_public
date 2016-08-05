@@ -39,7 +39,9 @@
 --------
 + 漏洞搜索使用了Flask作为web server，bootstrap作为前端
 
-+ 启动web server ：在flask目录下运行python app.py，默认端口是5000
++ 启动web server ：在flask目录下运行./app.py，默认端口是5000
+
++ ##### 启动Elassticsearch（如果已配置了Elasticsearch）：在elasticsearch-2.3.4/bin目录下运行./elasticsearch -d (-d表示以后台方式运行）
 
 + 搜索：在浏览器通过http://localhost:5000进行搜索漏洞，多个关键字可以用空格分开。
 
