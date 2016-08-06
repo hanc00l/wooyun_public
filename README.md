@@ -77,11 +77,12 @@ db.wooyun_drops.ensureIndex({"datetime":1})
 		
 		1、压缩包解压后是一个vmware虚拟机的镜像，可以由vmware直接打开运行；
 		2、由于在制作压缩包时虚拟机为“挂起”状态，当前虚拟机的IP地址可能和宿主机的IP地址段不一致，请将虚拟机重启后重新获取IP地址，虚拟机用户密码为hancool/qwe123；
-		3、进入wooyun_public目录，先用git更新一下到最新的代码git pull（如果提示merge冲突，先进行git reset --hard origin/master后再git pull）；
-		4、分别进入wooyun_public目录下的wooyun和wooyun_drops，运行爬虫爬取数据（爬取全部数据并且本地离线缓存）：scrapy crawl wooyun -a  page_max=0 -a local_store=true -a update=true
-		5、在elasticsearch-2.3.4/bin目录下运行./elasticsearch -d (-d表示以后台方式运行）
-		6、进入wooyun_publich目录下的flask，运行./app.py，启动web服务
-		7、打开浏览器，输入http://ip:5000，ip为虚拟机的网卡地址（使用ifconfig eth0查看）
+		3、在elasticsearch-2.3.4/bin目录下运行./elasticsearch -d (-d表示以后台方式运行）
+		4、运行mongo-connect，用于将mongodb的数据实时同步到elasticsearch:sudo mongo-connector -m localhost:27017 -t localhost:9200 -d elastic2_doc_manager &
+		5、进入wooyun_public目录，先用git更新一下到最新的代码git pull（如果提示merge冲突，先进行git reset --hard origin/master后再git pull）；
+		6、分别进入wooyun_public目录下的wooyun和wooyun_drops，运行爬虫爬取数据（爬取全部数据并且本地离线缓存）：scrapy crawl wooyun -a  page_max=0 -a local_store=true -a update=true
+		7、进入wooyun_publich目录下的flask，运行./app.py，启动web服务
+		8、打开浏览器，输入http://ip:5000，ip为虚拟机的网卡地址（使用ifconfig eth0查看）
 
 
 6.其它
