@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="wooyun public">
+    <meta name="author" content="hanc00l">
+    <title>{{title}}</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="static/bugs/bootstrap/css/bootstrap.min.css">
+    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="static/bugs/bootstrap/css/bootstrap-theme.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="static/bugs/js/jquery-1.11.3.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="static/bugs/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">search for wooyun.org</a>
+        </div>
+        <div class="navbar-collapse collapse" role="navigation">           
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div> <!-- navbar-collapse -->
+    </div> <!--/.container-->
+</nav><!--navbar -->
+
+<hr>
+{% block content %}{% end %}
+
+<footer class="footer">
+  <div class="container">
+    <div class="row footer-bottom">
+      <ul class="list-inline text-center">
+        <li>公开漏洞和知识库信息来自于<a href="http://www.wooyun.org/" target="_blank">wooyun.org</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

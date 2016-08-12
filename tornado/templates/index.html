@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="jumbotron masthead">
+    <div class="row">
+        <div class="col-sm-8  col-xs-12 col-sm-offset-2">
+            <h2 class="text-center">乌云公开漏洞、知识库搜索&nbsp;&nbsp;<small><small>漏洞/文章数：{{total_count_bugs}}/{{total_count_drops}}</small></small></h2>
+            <form class="form-horizontal" action="/search" method="get" name="login">
+                <div class="input-group">
+                    <input type="text" class="form-control " id="keywords" name="keywords" placeholder="输入搜索关键词……">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default btn-primary" type="submit"><span class="glyphicon glyphicon-search"></button>
+                  </span>
+                </div><!-- /input-group -->
+                <br/>
+                <div class="form-group">
+                  <div class="col-sm-8  col-sm-6">
+                    <div class="radio-inline">
+                          <label>
+                            <input type="radio" name="content_search_by" id="by_bugs" value="by_bugs" checked>乌云公开漏洞
+                          </label>
+                        </div>
+                        <div class="radio-inline">
+                          <label>
+                            <input type="radio" name="content_search_by" id="by_drops" value="by_drops">
+                            乌云知识库
+                          </label>
+                        </div>
+                    </div>
+				  <div class="col-sm-4 col-xs-6">
+						<div class="checkbox">
+					    	<label>
+					      		<input type="checkbox" name="search_by_html" value="true"> 全文搜索
+					    	</label>
+					  	</div>
+				  </div>
+			    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container projects">
+</div>
+
+{% end %}

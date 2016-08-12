@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="row">
+	  <div class="col-md-1"></div>
+	  <div class="col-md-10">
+		  <div>
+	  		<h2>关键字【{{keywords}}】的搜索结果<small>共{{page_info['total_rows']}}记录</small></h2>
+			  	<table class="table table-striped">
+			  	<tr>
+			  		<th width="10%">发表时间</th>
+			  		<th>标题</th>
+			  		<th width="10%">文章类型</th>
+			  		<th width="15%">作者</th>
+			  	</tr>
+			  	{% for row in page_info['rows'] %}
+			  	<tr>
+			  		<td>{{row['datetime']}}</td>
+			  		<td><a href="static/drops/{{row['url_local']}}" target="_blank">
+			  			{{row['title']}}</a></td>
+			  		<td><a href="{{row['url']}}" target="_blank">{{row['category']}}</a></td>
+
+			  		<td>{{row['author']}}</td>
+			  	</tr>
+			  	{% end %}
+				</table>
+				<!-- 分页组件js -->
+				<script src="static/bugs/js/jquery.twbsPagination.js"></script>
+				<ul id="pagination" class="pagination-sm"></ul>
+				<script >
+					 $(pagination).twbsPagination({
+					 	first: "首页",
+					 	prev: "前一页",
+					 	next: "后一页",
+					 	last: "尾页",
+				        totalPages: {{page_info['total']}},
+				        visiblePages: 5,
+				        startPage: {{page_info['current']}},
+				        onPageClick: function (event, page) {
+				            location.href="/search?keywords={{keywords}}&&content_search_by=by_drops&&search_by_html={{search_by_html}}&&page="+page;
+				        }
+				    });
+				</script>
+			</div>
+	 	</div>
+	  <div class="col-md-1"></div>
+	</div>
+{% end %}
