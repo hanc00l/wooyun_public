@@ -25,11 +25,11 @@ sudo apt-get install libxml2-dev libxslt1-dev python-dev zlib1g-dev libevent-dev
 sudo pip install lxml
 sudo pip install scrapy
 ```
-3、安装pymongo和flask（或tornador）
+3、安装pymongo和flask（或tornado）
 
 ```bash
 sudo pip install flask pymongo
-(sudo pip install tornador)
+(sudo pip install tornado)
 ```
 4、从github下载源码
 
