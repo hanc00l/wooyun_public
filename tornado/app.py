@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
+import os
 import math
 import re
 import time
 import urllib2
 import pymongo
-from flask import Flask, request, render_template
+import tornado.ioloop
+import tornado.web
 # setting:
 MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
@@ -19,8 +21,6 @@ ELASTICSEARCH_HOST = 'localhost:9200'
 #   yes:    always use elasticsearch
 #   no:     not use elasticsearch    
 SEARCH_BY_ES = 'auto'
-# flask app:
-app = Flask(__name__)
 # monogodb connection string
 connection_string = "mongodb://%s:%d" % (MONGODB_SERVER, MONGODB_PORT)
 content = {'by_bugs':
@@ -29,6 +29,16 @@ content = {'by_bugs':
            {'mongodb_collection': MONGODB_COLLECTION_DROPS, 'template_html': 'search_drops.html'},
            }
 
+def get_wooyun_total_count():
+    client = pymongo.MongoClient(connection_string)
+    db = client[MONGODB_DB]
+    collection_bugs = db[MONGODB_COLLECTION_BUGS]
+    total_count_bugs = collection_bugs.find().count()
+    collection_drops = db[MONGODB_COLLECTION_DROPS]
+    total_count_drops = collection_drops.find().count()
+    client.close()
+
+    return (total_count_bugs, total_count_drops)
 
 def get_search_regex(keywords, search_by_html):
     keywords_regex = {}
@@ -126,7 +136,7 @@ def search_mongodb_by_es(keywords, page, content_search_by, search_by_html):
 
 def check_elastichsearch_open():
     try:
-        html = urllib2.urlopen('http://%s' %ELASTICSEARCH_HOST).read()
+        html = urllib2.urlopen('http://%s' % ELASTICSEARCH_HOST).read()
         if len(html) > 0:
             return True
         else:
@@ -134,45 +144,51 @@ def check_elastichsearch_open():
     except:
         return False
 
-def get_wooyun_total_count():
-    client = pymongo.MongoClient(connection_string)
-    db = client[MONGODB_DB]
-    collection_bugs = db[MONGODB_COLLECTION_BUGS]
-    total_count_bugs = collection_bugs.find().count()
-    collection_drops = db[MONGODB_COLLECTION_DROPS]
-    total_count_drops = collection_drops.find().count()
-    client.close()
-
-    return (total_count_bugs, total_count_drops)
+        
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        total_count_bugs, total_count_drops = get_wooyun_total_count()
+        #
+        self.render('index.html', total_count_bugs=total_count_bugs, total_count_drops=total_count_drops, title=u'乌云公开漏洞、知识库搜索')
 
 
-@app.route('/')
-def index():
-    total_count_bugs, total_count_drops = get_wooyun_total_count()
-    return render_template('index.html', total_count_bugs=total_count_bugs, total_count_drops=total_count_drops, title=u'乌云公开漏洞、知识库搜索')
+class SearchHandler(tornado.web.RequestHandler):
+    def get(self):
+        keywords = self.get_argument('keywords')
+        page = int(self.get_argument('page', 1))
+        search_by_html = True if 'true' == self.get_argument(
+            'search_by_html', 'false').lower() else False
+        content_search_by = self.get_argument('content_search_by', 'by_bugs')
+        if page < 1:
+            page = 1
+        #search by elasticsearch or mongo
+        if SEARCH_BY_ES == 'yes' or ( SEARCH_BY_ES == 'auto' and check_elastichsearch_open() is True ):
+            page_info = search_mongodb_by_es(keywords, page, content_search_by, search_by_html)
+        else:
+            page_info = search_mongodb(keywords, page, content_search_by, search_by_html)
+        #
+        self.render(content[content_search_by]['template_html'], keywords=keywords, page_info=page_info, search_by_html=search_by_html, title=u'搜索结果-乌云公开漏洞、知识库搜索')
 
 
-@app.route('/search', methods=['get'])
-def search():
-    keywords = request.args.get('keywords')
-    page = int(request.args.get('page', 1))
-    search_by_html = True if 'true' == request.args.get(
-        'search_by_html', 'false').lower() else False
-    content_search_by = request.args.get('content_search_by', 'by_bugs')
-    if page < 1:
-        page = 1
-    #search by elasticsearch or mongo
-    if SEARCH_BY_ES == 'yes' or ( SEARCH_BY_ES == 'auto' and check_elastichsearch_open() is True ):
-        page_info = search_mongodb_by_es(keywords, page, content_search_by, search_by_html)
-    else:
-        page_info = search_mongodb(keywords, page, content_search_by, search_by_html)
-    #
-    return render_template(content[content_search_by]['template_html'], keywords=keywords, page_info=page_info, search_by_html=search_by_html, title=u'搜索结果-乌云公开漏洞、知识库搜索')
-
+class Application(tornado.web.Application):
+    def __init__(self):
+        handlers = [
+            (r"/", IndexHandler),
+            (r"/search", SearchHandler)
+        ]
+        settings = dict(
+            static_path= os.path.join(os.path.dirname(__file__), "../flask/static"),
+            template_path=os.path.join(os.path.dirname(__file__), "templates"),
+        )
+        tornado.web.Application.__init__(self, handlers, **settings)
 
 def main():
     port = 5000
-    app.run(host='0.0.0.0', port = port, debug=False, threaded=True)
+    application = Application()
+    application.listen(port)
 
-if __name__ == '__main__':
+    print('Listen on http://localhost:{0}'.format(port))
+    tornado.ioloop.IOLoop.instance().start()
+
+if __name__ == "__main__":
     main()

@@ -6,7 +6,7 @@ wooyun_public在Ubuntu下的安装
 + python 2.7和pip
 + mongodb
 + scrapy 
-+ flask
++ flask 或 tornado
 + pymongo 
 
 步骤
@@ -25,10 +25,11 @@ sudo apt-get install libxml2-dev libxslt1-dev python-dev zlib1g-dev libevent-dev
 sudo pip install lxml
 sudo pip install scrapy
 ```
-3、安装flask和pymongo
+3、安装pymongo和flask（或tornador）
 
 ```bash
 sudo pip install flask pymongo
+(sudo pip install tornador)
 ```
 4、从github下载源码
 

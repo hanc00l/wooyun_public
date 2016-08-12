@@ -7,9 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="wooyun public">
     <meta name="author" content="hanc00l">
-    {% if title %}
     <title>{{title}}</title>
-    {%endif%}
     <!-- 新 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="static/bugs/bootstrap/css/bootstrap.min.css">
     <!-- 可选的Bootstrap主题文件（一般不用引入） -->
@@ -36,15 +34,6 @@
 </nav><!--navbar -->
 
 <hr>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-    {% for message in messages %}
-        <li>{{ message }} </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
 {% block content %}{% endblock %}
 
 <footer class="footer">

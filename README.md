@@ -11,7 +11,7 @@
 + python 2.7和pip
 + mongodb
 + scrapy 
-+ flask 
++ flask 或者 tornado
 + pymongo
 + Elasticserch (搜索引擎，可选）
 
@@ -37,7 +37,7 @@
 
 3.搜索 
 --------
-+ 漏洞搜索使用了Flask作为web server，bootstrap作为前端
++ 漏洞搜索使用了Flask作为web server，bootstrap作为前端（8.12增加tornador web server，可配合nginx反向代理，支持高并发的应用）
 
 + 启动web server ：在flask目录下运行./app.py，默认端口是5000
 
