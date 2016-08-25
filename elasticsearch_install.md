@@ -75,7 +75,7 @@ rs.initiate( {"_id" : "rs0", "version" : 1, "members" : [ { "_id" : 0, "host" : 
 cd ~  
 sudo apt-get install unzip
 wget https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v1.9.4/elasticsearch-analysis-ik-1.9.4.zip
-unzip elasticsearch-analysis-ik-1.9.4.zip
+unzip elasticsearch-analysis-ik-1.9.4.zip -d elasticsearch-analysis-ik
 ```
 
 2、将插件复制到elasticsearch的plugins目录
