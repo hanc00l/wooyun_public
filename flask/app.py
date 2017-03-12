@@ -17,7 +17,7 @@ ELASTICSEARCH_HOST = 'localhost:9200'
 #ELASTICSEARCH CHOOSE
 #   auto:   auto detect elasticsearch ,if opened then use elasticsearch,else use mongodb
 #   yes:    always use elasticsearch
-#   no:     not use elasticsearch    
+#   no:     not use elasticsearch
 SEARCH_BY_ES = 'auto'
 # flask app:
 app = Flask(__name__)
@@ -82,7 +82,7 @@ def search_mongodb_by_es(keywords, page, content_search_by, search_by_html):
             query_dsl = {
                 "query":    {
                     "filtered": {
-                        "query":    {   
+                        "query":    {
                             "match_all":{ }
                         }
                     }
@@ -91,12 +91,12 @@ def search_mongodb_by_es(keywords, page, content_search_by, search_by_html):
                 "from": row_start,
                 "size": ROWS_PER_PAGE
             }
-        else:   
+        else:
             query_dsl = {
                 "query":    {
                     "filtered": {
-                        "query":    {   
-                            "match":    { 
+                        "query":    {
+                            "match":    {
                                 field_name : {
                                     'query':keywords,
                                     'operator':'and'
@@ -121,7 +121,7 @@ def search_mongodb_by_es(keywords, page, content_search_by, search_by_html):
                     urlsep = c['url'].split('//')[1].split('/')
                     c['url_local'] = '%s-%s.html' % (urlsep[1], urlsep[2])
             page_info['rows'].append(c)
-    
+
     return page_info
 
 def check_elastichsearch_open():
