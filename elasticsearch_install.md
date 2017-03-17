@@ -11,6 +11,9 @@ Elasticsearch Install
 ```bash
 sudo apt-get install openjdk-7-jdk
 ```
+
+注：5.x 版本需安装```openjdk-8-jdk```。
+
 2、下载elasticseach
 
 ```bash
@@ -18,11 +21,26 @@ wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distrib
 tar xvf elasticsearch-2.3.4.tar.gz
 ```
 
+亦可通过apt或者yum安装，参见
+
+deb [https://www.elastic.co/guide/en/elasticsearch/reference/5.0/deb.html](https://www.elastic.co/guide/en/elasticsearch/reference/5.0/deb.html)
+
+rpm [https://www.elastic.co/guide/en/elasticsearch/reference/5.0/rpm.html](https://www.elastic.co/guide/en/elasticsearch/reference/5.0/rpm.html)
+
+注：国内可使用tsinghua（清华）镜像源[https://mirrors.tuna.tsinghua.edu.cn/elasticstack/5.x/](https://mirrors.tuna.tsinghua.edu.cn/elasticstack/5.x/)
+
 3、运行elasticsearch
 
 ```bash
 cd elasticsearch-2.3.4/bin
 ./elasticsearch
+```
+
+亦可通过systemd启动
+
+```
+systemctl enable elasticsearch
+systemctl start elasticsearch
 ```
 
 4、测试一下，安装完成运行后elasticsearch会在9200端口上进行监听
@@ -48,7 +66,7 @@ curl -X GET http://localhost:9200
 -------
 
 1、编辑/etc/mongodb.conf，增加：
-	
+
 	replSet=rs0 #这里是指定replSet的名字 
 	oplogSize=100 #这里是指定oplog表数据大小（太大了不支持）
 
@@ -61,7 +79,7 @@ sudo service mongodb restart
 
 ```bash
 mongo
-rs.initiate( {"_id" : "rs0", "version" : 1, "members" : [ { "_id" : 0, "host" : "127.0.0.1:27017" } ]}) 
+rs.initiate( {"_id" : "rs0", "version" : 1, "members" : [ { "_id" : 0, "host" : "127.0.0.1:27017" } ]})
 ```
 3，搭建好replicSet之后，退出mongo shell重新登录，提示符会变成：rs0:PRIMARY>，就可以退出Mongodb
 
@@ -93,6 +111,8 @@ vi elasticsearch-2.3.4/config/elasticsearch.yml
 
 	index.analysis.analyzer.ik.type : 'ik'
 	index.analysis.analyzer.default.type : 'ik'
+
+注：此部操作在5.x版本中已废弃，参见[https://github.com/medcl/elasticsearch-analysis-ik](https://github.com/medcl/elasticsearch-analysis-ik)
 
 4、退出并重启elasticsearch
 
@@ -127,7 +147,7 @@ sudo vi /usr/local/lib/python2.7/dist-packages/mongo_connector/doc_managers/elas
 ```
 	将：
 	self.elastic = Elasticsearch(hosts=[url],**kwargs.get('clientOptions', {}))
-	
+
 	修改为：
 	self.elastic = Elasticsearch(hosts=[url],timeout=200, **kwargs.get('clientOptions', {}))
 
