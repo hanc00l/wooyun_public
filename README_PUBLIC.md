@@ -13,7 +13,7 @@
 + scrapy
 + flask 或者 tornado
 + pymongo
-+ Elasticserch (搜索引擎，可选）
++ Elasticsearch (搜索引擎，可选）
 
  [在ubuntu下的安装过程（点我）](install.md)
 
