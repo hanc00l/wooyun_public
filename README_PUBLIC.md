@@ -18,7 +18,7 @@
  [在ubuntu下的安装过程（点我）](install.md)
 
 
-2.爬虫（由于wooyun已不以访问，爬虫功能已不可用）
+2.爬虫（由于wooyun已不可访问，爬虫功能已不可用）
 --------
 
 + 乌云公开漏洞和知识库的爬虫分别位于目录scrapy/wooyun和scrapy/wooyun_drops
