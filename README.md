@@ -12,7 +12,7 @@
 
 虚拟机下载地址：
 
-[http://pan.baidu.com/s/1kVtY2rX](http://pan.baidu.com/s/1kVtY2rX) ，提取密码：5ik7（2016.8.5更新）
+[https://pan.baidu.com/s/1HkR4ggvAwTikshsjcKYBuA](https://pan.baidu.com/s/1HkR4ggvAwTikshsjcKYBuA) ，提取密码：8wnb（2018.4.23更新）
 
 [安装、使用指南（点我）](README_PUBLIC.md)
 
