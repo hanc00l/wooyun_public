@@ -1,6 +1,4 @@
 # wooyun_public
-This repo is archived. Thanks for wooyun!
-
 **乌云公开漏洞、知识库爬虫和搜索**
 **crawl and search for wooyun.org public bug(vulnerability) and drops**
 
